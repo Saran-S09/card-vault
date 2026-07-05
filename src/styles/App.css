@@ -754,7 +754,7 @@ h1, h2, h3, h4, h5, h6 {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 500;  /* above the bottom nav bar (z-index: 200) */
+  z-index: 100;
   padding: 20px;
   animation: fadeIn 0.2s ease-out;
 }
@@ -765,26 +765,12 @@ h1, h2, h3, h4, h5, h6 {
   border-radius: var(--radius-lg);
   width: 100%;
   max-width: 600px;
-  max-height: 90vh;
   box-shadow: var(--shadow-lg);
   overflow: hidden;
   position: relative;
   display: flex;
   flex-direction: column;
   animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-/*
-  The <form> inside AddCardModal sits between .modal-container (flex parent)
-  and .modal-body / .modal-footer (intended flex children).
-  Without this rule the flex scroll chain is broken and the body cannot scroll.
-*/
-.modal-container > form {
-  display: flex;
-  flex-direction: column;
-  flex: 1 1 0;   /* grow to fill, allow shrink, start at 0 */
-  min-height: 0; /* critical: allows flex child to shrink below content size */
-  overflow: hidden;
 }
 
 .modal-header {
@@ -796,13 +782,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .modal-header h3 {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 700;
-  background: linear-gradient(135deg, var(--text-primary) 60%, var(--accent-blue));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  letter-spacing: -0.3px;
 }
 
 .modal-close-btn {
@@ -826,9 +807,7 @@ h1, h2, h3, h4, h5, h6 {
 .modal-body {
   padding: 24px;
   overflow-y: auto;
-  -webkit-overflow-scrolling: touch; /* smooth scroll on iOS Safari */
-  flex: 1 1 0;   /* fill remaining space */
-  min-height: 0; /* critical for flex scroll chain */
+  max-height: 75vh;
 }
 
 /* Form Elements */
@@ -952,13 +931,11 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .modal-footer {
-  padding: 16px 24px;
+  padding: 20px 24px;
   border-top: 1px solid var(--border-color);
   display: flex;
   justify-content: flex-end;
   gap: 12px;
-  flex-shrink: 0;       /* never compress — always visible */
-  background: var(--bg-modal);
 }
 
 .btn-secondary {
@@ -982,18 +959,13 @@ h1, h2, h3, h4, h5, h6 {
 .viewer-modal-container {
   max-width: 900px;
   width: 90%;
-  max-height: 90vh;
-  display: flex;
-  flex-direction: column;
 }
 
 .viewer-grid {
   display: grid;
   grid-template-columns: 1.2fr 1fr;
   gap: 0;
-  flex: 1;
-  min-height: 0;
-  overflow: hidden;
+  min-height: 400px;
 }
 
 @media (max-width: 768px) {
@@ -1045,17 +1017,14 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .viewer-info-pane {
-  padding: 24px;
+  padding: 30px;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  justify-content: space-between;
 }
 
 .viewer-header-info {
-  flex: 1;
-  overflow-y: auto;
-  margin-bottom: 16px;
-  min-height: 0;
+  margin-bottom: 20px;
 }
 
 .viewer-title-row {
@@ -1130,12 +1099,8 @@ h1, h2, h3, h4, h5, h6 {
 .viewer-actions {
   display: flex;
   gap: 10px;
-  margin-top: 0;
-  flex-shrink: 0;
-  padding-top: 16px;
-  border-top: 1px solid var(--border-color);
+  margin-top: 20px;
 }
-
 
 .viewer-actions button {
   flex: 1;
@@ -1635,121 +1600,61 @@ input:checked + .slider:before {
   /* keep toggle switch right-aligned */
   .settings-row .switch {
     align-self: flex-start;
-   /* --- Modal Overlays --- */
-  /* Modals slide up from bottom, sit above the fixed nav bar (z-index 500 > 200) */
+  }
+
+  /* --- Modal Overlays --- */
   .modal-overlay {
     align-items: flex-end;
-    padding: 0;
   }
 
-  /* Add Document / Edit modal — takes full height above the nav */
   .modal-container {
     width: 100%;
-    max-width: 100%;
-    height: calc(100dvh - 72px);
-    max-height: calc(100dvh - 72px);
+    max-height: 92vh;
     border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-  }
-
-  /* The <form> inside AddCardModal breaks the flex chain — make it a flex column too */
-  .modal-container > form {
-    flex: 1 1 0;
-    min-height: 0;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
   }
 
   .modal-header {
-    padding: 16px 16px 14px;
-    flex-shrink: 0;
-    background: var(--bg-modal);
-    border-bottom: 1px solid var(--border-color);
+    padding: 18px 16px 14px;
   }
 
-  /* Scrollable body — fills all space between header & footer */
   .modal-body {
-    flex: 1 1 0;
-    min-height: 0;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    padding: 14px 16px 12px;
-    overscroll-behavior: contain;
+    padding: 14px 16px 20px;
   }
 
-  .modal-footer {
-    flex-shrink: 0;
-    background: var(--bg-modal);
-    border-top: 1px solid var(--border-color);
-    padding: 14px 16px;
-  }
-
-  /* Document Viewer modal */
   .viewer-modal-container {
     width: 100%;
     max-width: 100%;
-    height: calc(100dvh - 72px);
-    max-height: calc(100dvh - 72px);
+    max-height: 95vh;
     border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
   }
 
-  /*
-    viewer-grid is a CSS Grid. Grids don't respond to flex:1 like flex children.
-    Switch to display:flex+flex-direction:column so it can fill & scroll properly.
-  */
   .viewer-grid {
-    display: flex;
-    flex-direction: column;
-    flex: 1 1 0;
-    min-height: 0;
+    grid-template-columns: 1fr;
+    max-height: 80vh;
     overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    overscroll-behavior: contain;
   }
 
   .viewer-image-pane {
     padding: 14px;
     border-right: none;
     border-bottom: 1px solid var(--border-color);
-    flex-shrink: 0;
   }
 
   .viewer-image-container {
-    max-height: 200px;
+    max-height: 220px;
   }
 
   .viewer-info-pane {
-    padding: 14px 14px 0;
-    flex-shrink: 0;
+    padding: 18px 14px;
   }
 
-  .viewer-header-info {
-    overflow: visible;
-    margin-bottom: 0;
-  }
-
-  /* Action buttons — always visible at the very bottom */
   .viewer-actions {
-    position: sticky;
-    bottom: 0;
-    background: var(--bg-modal);
-    padding: 12px 14px;
-    margin-top: 12px;
-    flex-direction: row;
+    flex-direction: column;
     gap: 8px;
-    border-top: 1px solid var(--border-color);
-    z-index: 2;
-    flex-shrink: 0;
   }
 
   .viewer-actions button {
-    flex: 1;
+    width: 100%;
   }
 
   /* --- Card Action Buttons --- */
@@ -1839,4 +1744,107 @@ input:checked + .slider:before {
   .viewer-image-container {
     max-height: 180px;
   }
+}
+
+@media (max-width: 768px) {
+  .modal-container {
+    max-height: 95vh;
+  }
+
+  .modal-body {
+    max-height: none;
+    overflow-y: auto;
+  }
+
+  .modal-footer {
+    flex-direction: column;
+  }
+
+  .modal-footer button {
+    width: 100%;
+  }
+}
+
+.modal-footer {
+  padding: 20px 24px;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+
+  position: sticky;
+  bottom: 0;
+  background: var(--bg-modal);
+  z-index: 10;
+}
+
+/* Overlay */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+/* Modal Box */
+.modal {
+  width: 90%;
+  max-width: 600px;
+  max-height: 90vh;
+  background: var(--bg-modal);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* IMPORTANT */
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+}
+
+/* Header */
+.modal-header {
+  padding: 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  flex-shrink: 0;
+}
+
+/* Scrollable Body */
+.modal-body {
+  padding: 16px;
+  overflow-y: auto;
+  flex: 1; /* IMPORTANT makes it fill space */
+  max-height: calc(90vh - 140px);
+}
+
+/* Footer Buttons ALWAYS visible */
+.modal-footer {
+  padding: 16px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  background: var(--bg-modal);
+  position: sticky;
+  bottom: 0;
+  flex-shrink: 0;
+}
+
+/* Buttons */
+.cancel-btn {
+  padding: 10px 16px;
+  background: transparent;
+  border: 1px solid #666;
+  color: white;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.add-btn {
+  padding: 10px 16px;
+  background: #4f46e5;
+  border: none;
+  color: white;
+  cursor: pointer;
+  border-radius: 6px;
 }
