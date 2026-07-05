@@ -765,6 +765,7 @@ h1, h2, h3, h4, h5, h6 {
   border-radius: var(--radius-lg);
   width: 100%;
   max-width: 600px;
+  max-height: 90vh;
   box-shadow: var(--shadow-lg);
   overflow: hidden;
   position: relative;
@@ -782,8 +783,13 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .modal-header h3 {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 700;
+  background: linear-gradient(135deg, var(--text-primary) 60%, var(--accent-blue));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.3px;
 }
 
 .modal-close-btn {
@@ -807,7 +813,8 @@ h1, h2, h3, h4, h5, h6 {
 .modal-body {
   padding: 24px;
   overflow-y: auto;
-  max-height: 75vh;
+  flex: 1;
+  min-height: 0;
 }
 
 /* Form Elements */
@@ -931,11 +938,13 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .modal-footer {
-  padding: 20px 24px;
+  padding: 16px 24px;
   border-top: 1px solid var(--border-color);
   display: flex;
   justify-content: flex-end;
   gap: 12px;
+  flex-shrink: 0;
+  background: var(--bg-modal);
 }
 
 .btn-secondary {
@@ -959,13 +968,18 @@ h1, h2, h3, h4, h5, h6 {
 .viewer-modal-container {
   max-width: 900px;
   width: 90%;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .viewer-grid {
   display: grid;
   grid-template-columns: 1.2fr 1fr;
   gap: 0;
-  min-height: 400px;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
 }
 
 @media (max-width: 768px) {
@@ -1017,14 +1031,17 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .viewer-info-pane {
-  padding: 30px;
+  padding: 24px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  overflow: hidden;
 }
 
 .viewer-header-info {
-  margin-bottom: 20px;
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 16px;
+  min-height: 0;
 }
 
 .viewer-title-row {
@@ -1099,8 +1116,12 @@ h1, h2, h3, h4, h5, h6 {
 .viewer-actions {
   display: flex;
   gap: 10px;
-  margin-top: 20px;
+  margin-top: 0;
+  flex-shrink: 0;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-color);
 }
+
 
 .viewer-actions button {
   flex: 1;
