@@ -1624,66 +1624,67 @@ input:checked + .slider:before {
   }
 
   /* --- Modal Overlays --- */
-  /* On mobile, modals slide up from bottom ABOVE the nav bar */
+  /* Modals slide up from bottom, above the fixed nav bar */
   .modal-overlay {
     align-items: flex-end;
-    padding: 0;          /* no side padding — let modal be full width */
-    padding-top: 60px;   /* small gap from top of screen */
+    padding: 0;
+    padding-top: 60px; /* gap at top so user sees they can dismiss */
   }
 
+  /* Add Document / Edit modal */
   .modal-container {
     width: 100%;
     max-width: 100%;
-    /* Leave room at bottom so footer clears the fixed nav bar */
+    height: calc(100dvh - 72px);   /* fixed height = screen minus nav bar */
     max-height: calc(100dvh - 72px);
     border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;              /* clip only at the container level */
   }
 
   .modal-header {
     padding: 16px 16px 14px;
-    position: sticky;
-    top: 0;
+    flex-shrink: 0;                /* never compress header */
     background: var(--bg-modal);
-    z-index: 1;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  /* Scrollable body — flex:1 fills remaining space between header & footer */
+  .modal-body {
+    flex: 1 1 0;
+    min-height: 0;                 /* critical: lets flex child shrink & scroll */
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch; /* smooth scroll on iOS */
+    padding: 14px 16px 12px;
   }
 
   .modal-footer {
-    position: sticky;
-    bottom: 0;
+    flex-shrink: 0;                /* never compress footer */
     background: var(--bg-modal);
-    z-index: 1;
+    border-top: 1px solid var(--border-color);
     padding: 14px 16px;
   }
 
-  .modal-body {
-    padding: 14px 16px 8px;
-  }
-
+  /* Document Viewer modal */
   .viewer-modal-container {
     width: 100%;
     max-width: 100%;
+    height: calc(100dvh - 72px);
     max-height: calc(100dvh - 72px);
     border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-  }
-
-  .viewer-grid {
-    grid-template-columns: 1fr;
-    overflow-y: auto;
-  }
-
-  /* Viewer modal on mobile: stack vertically, header fixed, actions pinned at bottom */
-  .viewer-modal-container {
     display: flex;
     flex-direction: column;
     overflow: hidden;
   }
 
-  /* viewer-grid scrolls, viewer-info-pane no longer scrolls separately */
+  /* Viewer grid is the scrollable middle area */
   .viewer-grid {
     grid-template-columns: 1fr;
-    flex: 1;
+    flex: 1 1 0;
     min-height: 0;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   .viewer-image-pane {
@@ -1699,28 +1700,28 @@ input:checked + .slider:before {
 
   .viewer-info-pane {
     padding: 14px 14px 0;
-    overflow: visible;   /* let viewer-grid handle scroll */
+    overflow: visible;
     flex-shrink: 0;
   }
 
-  /* header-info no longer needs individual scroll on mobile */
   .viewer-header-info {
     flex: unset;
     overflow: visible;
     margin-bottom: 0;
   }
 
-  /* action buttons: always visible, stuck at the very bottom */
+  /* Action buttons always pinned at the bottom of the viewer */
   .viewer-actions {
     position: sticky;
     bottom: 0;
     background: var(--bg-modal);
     padding: 12px 14px;
-    margin-top: 0;
+    margin-top: 12px;
     flex-direction: row;
     gap: 8px;
     border-top: 1px solid var(--border-color);
     z-index: 2;
+    flex-shrink: 0;
   }
 
   .viewer-actions button {
