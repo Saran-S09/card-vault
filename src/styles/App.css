@@ -774,6 +774,19 @@ h1, h2, h3, h4, h5, h6 {
   animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+/*
+  The <form> inside AddCardModal sits between .modal-container (flex parent)
+  and .modal-body / .modal-footer (intended flex children).
+  Without this rule the flex scroll chain is broken and the body cannot scroll.
+*/
+.modal-container > form {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0;   /* grow to fill, allow shrink, start at 0 */
+  min-height: 0; /* critical: allows flex child to shrink below content size */
+  overflow: hidden;
+}
+
 .modal-header {
   padding: 20px 24px;
   border-bottom: 1px solid var(--border-color);
@@ -813,8 +826,9 @@ h1, h2, h3, h4, h5, h6 {
 .modal-body {
   padding: 24px;
   overflow-y: auto;
-  flex: 1;
-  min-height: 0;
+  -webkit-overflow-scrolling: touch; /* smooth scroll on iOS Safari */
+  flex: 1 1 0;   /* fill remaining space */
+  min-height: 0; /* critical for flex scroll chain */
 }
 
 /* Form Elements */
@@ -943,7 +957,7 @@ h1, h2, h3, h4, h5, h6 {
   display: flex;
   justify-content: flex-end;
   gap: 12px;
-  flex-shrink: 0;
+  flex-shrink: 0;       /* never compress — always visible */
   background: var(--bg-modal);
 }
 
@@ -1621,46 +1635,53 @@ input:checked + .slider:before {
   /* keep toggle switch right-aligned */
   .settings-row .switch {
     align-self: flex-start;
-  }
-
-  /* --- Modal Overlays --- */
-  /* Modals slide up from bottom, above the fixed nav bar */
+   /* --- Modal Overlays --- */
+  /* Modals slide up from bottom, sit above the fixed nav bar (z-index 500 > 200) */
   .modal-overlay {
     align-items: flex-end;
     padding: 0;
-    padding-top: 60px; /* gap at top so user sees they can dismiss */
   }
 
-  /* Add Document / Edit modal */
+  /* Add Document / Edit modal — takes full height above the nav */
   .modal-container {
     width: 100%;
     max-width: 100%;
-    height: calc(100dvh - 72px);   /* fixed height = screen minus nav bar */
+    height: calc(100dvh - 72px);
     max-height: calc(100dvh - 72px);
     border-radius: var(--radius-lg) var(--radius-lg) 0 0;
     display: flex;
     flex-direction: column;
-    overflow: hidden;              /* clip only at the container level */
+    overflow: hidden;
+  }
+
+  /* The <form> inside AddCardModal breaks the flex chain — make it a flex column too */
+  .modal-container > form {
+    flex: 1 1 0;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
   }
 
   .modal-header {
     padding: 16px 16px 14px;
-    flex-shrink: 0;                /* never compress header */
+    flex-shrink: 0;
     background: var(--bg-modal);
     border-bottom: 1px solid var(--border-color);
   }
 
-  /* Scrollable body — flex:1 fills remaining space between header & footer */
+  /* Scrollable body — fills all space between header & footer */
   .modal-body {
     flex: 1 1 0;
-    min-height: 0;                 /* critical: lets flex child shrink & scroll */
+    min-height: 0;
     overflow-y: auto;
-    -webkit-overflow-scrolling: touch; /* smooth scroll on iOS */
+    -webkit-overflow-scrolling: touch;
     padding: 14px 16px 12px;
+    overscroll-behavior: contain;
   }
 
   .modal-footer {
-    flex-shrink: 0;                /* never compress footer */
+    flex-shrink: 0;
     background: var(--bg-modal);
     border-top: 1px solid var(--border-color);
     padding: 14px 16px;
@@ -1678,13 +1699,18 @@ input:checked + .slider:before {
     overflow: hidden;
   }
 
-  /* Viewer grid is the scrollable middle area */
+  /*
+    viewer-grid is a CSS Grid. Grids don't respond to flex:1 like flex children.
+    Switch to display:flex+flex-direction:column so it can fill & scroll properly.
+  */
   .viewer-grid {
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
     flex: 1 1 0;
     min-height: 0;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
   }
 
   .viewer-image-pane {
@@ -1700,17 +1726,15 @@ input:checked + .slider:before {
 
   .viewer-info-pane {
     padding: 14px 14px 0;
-    overflow: visible;
     flex-shrink: 0;
   }
 
   .viewer-header-info {
-    flex: unset;
     overflow: visible;
     margin-bottom: 0;
   }
 
-  /* Action buttons always pinned at the bottom of the viewer */
+  /* Action buttons — always visible at the very bottom */
   .viewer-actions {
     position: sticky;
     bottom: 0;
