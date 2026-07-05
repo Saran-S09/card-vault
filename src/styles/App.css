@@ -754,7 +754,7 @@ h1, h2, h3, h4, h5, h6 {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 100;
+  z-index: 500;  /* above the bottom nav bar (z-index: 200) */
   padding: 20px;
   animation: fadeIn 0.2s ease-out;
 }
@@ -1624,34 +1624,65 @@ input:checked + .slider:before {
   }
 
   /* --- Modal Overlays --- */
+  /* On mobile, modals slide up from bottom ABOVE the nav bar */
   .modal-overlay {
     align-items: flex-end;
+    padding: 0;          /* no side padding — let modal be full width */
+    padding-top: 60px;   /* small gap from top of screen */
   }
 
   .modal-container {
     width: 100%;
-    max-height: 92vh;
+    max-width: 100%;
+    /* Leave room at bottom so footer clears the fixed nav bar */
+    max-height: calc(100dvh - 72px);
     border-radius: var(--radius-lg) var(--radius-lg) 0 0;
   }
 
   .modal-header {
-    padding: 18px 16px 14px;
+    padding: 16px 16px 14px;
+    position: sticky;
+    top: 0;
+    background: var(--bg-modal);
+    z-index: 1;
+  }
+
+  .modal-footer {
+    position: sticky;
+    bottom: 0;
+    background: var(--bg-modal);
+    z-index: 1;
+    padding: 14px 16px;
   }
 
   .modal-body {
-    padding: 14px 16px 20px;
+    padding: 14px 16px 8px;
   }
 
   .viewer-modal-container {
     width: 100%;
     max-width: 100%;
-    max-height: 95vh;
+    max-height: calc(100dvh - 72px);
     border-radius: var(--radius-lg) var(--radius-lg) 0 0;
   }
 
   .viewer-grid {
     grid-template-columns: 1fr;
-    max-height: 80vh;
+    overflow-y: auto;
+  }
+
+  /* Viewer modal on mobile: stack vertically, header fixed, actions pinned at bottom */
+  .viewer-modal-container {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* viewer-grid scrolls, viewer-info-pane no longer scrolls separately */
+  .viewer-grid {
+    grid-template-columns: 1fr;
+    flex: 1;
+    min-height: 0;
     overflow-y: auto;
   }
 
@@ -1659,23 +1690,41 @@ input:checked + .slider:before {
     padding: 14px;
     border-right: none;
     border-bottom: 1px solid var(--border-color);
+    flex-shrink: 0;
   }
 
   .viewer-image-container {
-    max-height: 220px;
+    max-height: 200px;
   }
 
   .viewer-info-pane {
-    padding: 18px 14px;
+    padding: 14px 14px 0;
+    overflow: visible;   /* let viewer-grid handle scroll */
+    flex-shrink: 0;
   }
 
+  /* header-info no longer needs individual scroll on mobile */
+  .viewer-header-info {
+    flex: unset;
+    overflow: visible;
+    margin-bottom: 0;
+  }
+
+  /* action buttons: always visible, stuck at the very bottom */
   .viewer-actions {
-    flex-direction: column;
+    position: sticky;
+    bottom: 0;
+    background: var(--bg-modal);
+    padding: 12px 14px;
+    margin-top: 0;
+    flex-direction: row;
     gap: 8px;
+    border-top: 1px solid var(--border-color);
+    z-index: 2;
   }
 
   .viewer-actions button {
-    width: 100%;
+    flex: 1;
   }
 
   /* --- Card Action Buttons --- */
