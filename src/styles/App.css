@@ -1358,93 +1358,181 @@ input:checked + .slider:before {
   40%, 80% { transform: translateX(6px); }
 }
 
-/* Mobile Responsiveness Rules */
+/* /* =============================================
+   MOBILE RESPONSIVENESS — max-width: 768px
+   ============================================= */
 @media (max-width: 768px) {
+
+  /* --- Layout --- */
   .layout {
     flex-direction: column;
-    padding-bottom: 70px;
+    padding-bottom: 72px; /* space for fixed bottom nav */
   }
-  
+
+  /* --- Bottom Navigation Bar --- */
   .sidebar {
     position: fixed;
     bottom: 0;
     left: 0;
+    right: 0;
     width: 100%;
-    background: var(--bg-sidebar);
+    background: rgba(13, 18, 34, 0.97);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border-right: none;
     border-top: 1px solid var(--border-color);
     border-bottom: none;
-    padding: 10px;
-    z-index: 100;
+    padding: 6px 8px env(safe-area-inset-bottom, 6px);
+    z-index: 200;
   }
-  
+
   .sidebar-logo {
     display: none;
   }
-  
+
   .sidebar-menu {
     flex-direction: row;
     overflow-x: visible;
     padding-bottom: 0;
     justify-content: space-around;
     margin: 0;
+    gap: 0;
+    list-style: none;
   }
-  
+
   .sidebar-item {
+    flex: 1;
     flex-direction: column;
-    padding: 8px;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 4px;
     font-size: 11px;
-    gap: 4px;
-    border-left: 3px solid transparent;
+    gap: 3px;
+    border-left: none;
+    border-bottom: 2px solid transparent;
     border-radius: 0;
     white-space: nowrap;
+    color: var(--text-muted);
+    transition: color var(--transition-fast), border-color var(--transition-fast);
   }
-  
-  .sidebar-item svg {
-    margin-right: 0;
-    margin-bottom: 2px;
-  }
-  
-  .sidebar-item.active {
-    border-left: 3px solid transparent;
-    border-bottom: 3px solid var(--accent-blue);
+
+  .sidebar-item:hover {
+    color: var(--text-secondary);
     background: transparent;
+    transform: none;
   }
-  
+
+  .sidebar-item svg {
+    width: 22px;
+    height: 22px;
+    margin-right: 0;
+    margin-bottom: 1px;
+  }
+
+  .sidebar-item span {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+  }
+
+  .sidebar-item.active {
+    border-left: none;
+    border-bottom: 2px solid var(--accent-blue);
+    background: transparent;
+    color: var(--accent-blue);
+  }
+
+  .sidebar-item.active svg {
+    color: var(--accent-blue);
+  }
+
   .sidebar-footer {
-    display: none; /* Hide capacity tracker in mobile horizontal sidebar */
+    display: none;
   }
-  
+
+  /* --- Main Content --- */
   .content {
-    padding: 20px 16px;
+    padding: 16px 14px 20px;
     height: auto;
     overflow-y: visible;
+    gap: 18px;
   }
-  
+
+  /* --- Header --- */
   .header {
     flex-direction: column;
     align-items: flex-start;
-    gap: 15px;
-    padding-bottom: 15px;
+    gap: 12px;
+    padding-bottom: 14px;
   }
-  
+
+  .header-title-section h2 {
+    font-size: 22px;
+    letter-spacing: -0.3px;
+  }
+
+  .header-title-section p {
+    font-size: 13px;
+  }
+
   .header-actions {
     width: 100%;
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 8px;
     justify-content: flex-start;
   }
 
+  /* --- Dashboard Stats Grid (2-col on tablet, 1-col below) --- */
   .dashboard-grid {
-    grid-template-columns: 1fr;
-    gap: 15px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
   }
 
+  .stat-card {
+    padding: 16px;
+    gap: 10px;
+  }
+
+  .stat-icon-wrapper {
+    width: 38px;
+    height: 38px;
+  }
+
+  .stat-details h4 {
+    font-size: 12px;
+  }
+
+  .stat-value {
+    font-size: 26px !important;
+  }
+
+  /* --- Dashboard Details Row (Category + Safety) --- */
+  .dashboard-details-row {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .dashboard-panel {
+    padding: 18px 16px;
+  }
+
+  .dashboard-panel h3 {
+    font-size: 15px;
+    margin-bottom: 14px;
+  }
+
+  .safety-meter-card {
+    align-items: center;
+    text-align: center;
+    padding: 20px 16px;
+  }
+
+  /* --- Search & Filter Controls --- */
   .controls-row {
     flex-direction: column;
     align-items: stretch;
-    gap: 12px;
+    gap: 10px;
   }
 
   .search-box-wrapper {
@@ -1455,27 +1543,89 @@ input:checked + .slider:before {
     width: 100%;
   }
 
-  .grid-container {
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 20px;
+  .filter-pills {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: 4px;
+    gap: 6px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
   }
 
-  /* Modal responsiveness updates */
-  .modal-container {
-    width: 100%;
-    max-height: 90vh;
+  .filter-pills::-webkit-scrollbar {
+    display: none;
+  }
+
+  .filter-pill {
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /* --- Document Card Grid --- */
+  .grid-container {
+    grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
+    gap: 12px;
+  }
+
+  /* --- Settings Page Rows --- */
+  .settings-container {
+    gap: 16px;
+  }
+
+  .settings-card {
+    padding: 18px 14px;
     border-radius: var(--radius-md);
   }
 
+  .settings-card h3 {
+    font-size: 15px;
+    padding-bottom: 10px;
+    margin-bottom: 4px;
+  }
+
+  .settings-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 0;
+  }
+
+  .settings-row .btn-primary,
+  .settings-row .btn-secondary,
+  .settings-row .btn-danger {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* keep toggle switch right-aligned */
+  .settings-row .switch {
+    align-self: flex-start;
+  }
+
+  /* --- Modal Overlays --- */
+  .modal-overlay {
+    align-items: flex-end;
+  }
+
+  .modal-container {
+    width: 100%;
+    max-height: 92vh;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  }
+
+  .modal-header {
+    padding: 18px 16px 14px;
+  }
+
   .modal-body {
-    padding: 16px;
+    padding: 14px 16px 20px;
   }
 
   .viewer-modal-container {
     width: 100%;
     max-width: 100%;
     max-height: 95vh;
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
   }
 
   .viewer-grid {
@@ -1485,58 +1635,113 @@ input:checked + .slider:before {
   }
 
   .viewer-image-pane {
-    padding: 15px;
+    padding: 14px;
     border-right: none;
     border-bottom: 1px solid var(--border-color);
   }
 
   .viewer-image-container {
-    max-height: 250px;
+    max-height: 220px;
   }
 
   .viewer-info-pane {
-    padding: 20px 16px;
-  }
-}
-
-@media (max-width: 480px) {
-  .header-title-section h2 {
-    font-size: 24px;
+    padding: 18px 14px;
   }
 
-  .btn-primary, .btn-secondary, .btn-danger {
-    padding: 10px 16px;
-    font-size: 13px;
-    width: 100%;
-    justify-content: center;
-  }
-
-  .header-actions {
+  .viewer-actions {
     flex-direction: column;
-    align-items: stretch;
+    gap: 8px;
   }
 
-  .filter-pills {
-    gap: 6px;
+  .viewer-actions button {
+    width: 100%;
   }
 
-  .filter-pill {
-    padding: 6px 12px;
-    font-size: 12px;
-  }
-
-  .grid-container {
-    grid-template-columns: 1fr;
-  }
-
+  /* --- Card Action Buttons --- */
   .card-actions-tray {
     flex-wrap: wrap;
     gap: 6px;
   }
 
   .card-btn {
-    flex: 1 1 calc(50% - 3px); /* 2x2 grid of actions on tight mobile views */
+    flex: 1 1 calc(50% - 4px);
     font-size: 11px;
     padding: 6px 8px;
+  }
+}
+
+/* =============================================
+   MOBILE RESPONSIVENESS — max-width: 480px
+   ============================================= */
+@media (max-width: 480px) {
+
+  .content {
+    padding: 12px 10px 20px;
+  }
+
+  .header-title-section h2 {
+    font-size: 20px;
+  }
+
+  /* 1-column stat cards on very small screens */
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .stat-card {
+    flex-direction: row;
+    align-items: center;
+    gap: 14px;
+    padding: 14px;
+  }
+
+  .stat-details h4 {
+    font-size: 11px;
+  }
+
+  .stat-value {
+    font-size: 22px !important;
+  }
+
+  /* Full-width buttons in header */
+  .header-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .btn-primary,
+  .btn-secondary,
+  .btn-danger {
+    width: 100%;
+    justify-content: center;
+    padding: 11px 16px;
+    font-size: 13px;
+  }
+
+  /* Cards: 1-column grid on very small screens */
+  .grid-container {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .filter-pill {
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+
+  /* Settings rows still stack */
+  .settings-row .switch {
+    align-self: flex-start;
+  }
+
+  /* Modals slide up full width */
+  .modal-container {
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  }
+
+  .viewer-image-container {
+    max-height: 180px;
   }
 }
